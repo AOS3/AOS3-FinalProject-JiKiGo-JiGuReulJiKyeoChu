@@ -11,7 +11,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.protect.jikigo.R
 import com.protect.jikigo.data.Coupon
 import com.protect.jikigo.data.Storage
-import com.protect.jikigo.data.Store
 import com.protect.jikigo.databinding.FragmentHomeBinding
 import com.protect.jikigo.ui.HomeAdapter
 import com.protect.jikigo.ui.HomeStoreItemClickListener

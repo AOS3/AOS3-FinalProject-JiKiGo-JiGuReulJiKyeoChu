@@ -5,8 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.protect.jikigo.data.Coupon
-import com.protect.jikigo.data.Store
-import com.protect.jikigo.databinding.ItemHomeStoreBinding
+import com.protect.jikigo.databinding.ItemCouponBinding
 import com.protect.jikigo.ui.extensions.applyNumberFormat
 
 class HomeAdapter(
@@ -29,7 +28,7 @@ class HomeAdapter(
 
 
 class HomeViewHolder(
-    private val binding: ItemHomeStoreBinding,
+    private val binding: ItemCouponBinding,
     private val listener: HomeStoreItemClickListener
 ) : RecyclerView.ViewHolder(binding.root) {
     fun bind(item: Coupon) {
@@ -39,11 +38,11 @@ class HomeViewHolder(
         with(binding) {
             Glide.with(root.context)
                 .load(item.image) // 이미지 URL
-                .into(ivRvThumbNail); // 이미지가 로드될 ImageView
+                .into(ivCouponDetailThumnail); // 이미지가 로드될 ImageView
 
-            tvRvTitle.text = item.name
-            tvRvNumber.applyNumberFormat(item.price)
-            tvRvAddress.text = item.brand
+            tvCouponName.text = item.name
+            tvCouponPrice.applyNumberFormat(item.price)
+            tvCouponBrand.text = item.brand
         }
 
     }
@@ -51,7 +50,7 @@ class HomeViewHolder(
     companion object {
         fun from(parent: ViewGroup, listener: HomeStoreItemClickListener): HomeViewHolder {
             return HomeViewHolder(
-                ItemHomeStoreBinding.inflate(
+                ItemCouponBinding.inflate(
                     LayoutInflater.from(parent.context),
                     parent,
                     false

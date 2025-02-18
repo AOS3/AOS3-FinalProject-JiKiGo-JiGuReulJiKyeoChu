@@ -363,7 +363,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="20dp"
-				android:text="오늘의 착한 가게 🏪"
+				android:text="오늘의 상품 🏪"
 				android:textStyle="bold"
 				app:layout_constraintStart_toStartOf="@id/view_home_point"
 				app:layout_constraintTop_toBottomOf="@id/view_home_notice" />
@@ -394,6 +394,7 @@
 				android:layout_width="0dp"
 				android:layout_height="wrap_content"
 				android:layout_marginHorizontal="20dp"
+				android:layout_marginTop="10dp"
 				android:layout_marginBottom="20dp"
 				android:orientation="horizontal"
 				app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
