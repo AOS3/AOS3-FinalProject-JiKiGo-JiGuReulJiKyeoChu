@@ -6,5 +6,6 @@ data class UserPaymentHistory(
     val payName: String = "",
     val amount: Int = 0,
     val paymentDate: String = "",// = getCurrentFormattedDate(), // 현재 날짜를 String으로 저장,
+    val day: Int = 0,
     val payType: String = "" // 사용 또는 적립
 )

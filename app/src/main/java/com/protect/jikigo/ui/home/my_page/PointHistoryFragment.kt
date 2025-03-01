@@ -1,16 +1,21 @@
 package com.protect.jikigo.ui.home.my_page
 
+import android.graphics.Typeface
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.protect.jikigo.R
 import com.protect.jikigo.databinding.FragmentPointHistoryBinding
+import com.protect.jikigo.ui.adapter.CalendarDaysAdapter
 import com.protect.jikigo.ui.adapter.PointHistoryAdapter
 import com.protect.jikigo.ui.extensions.getUserId
 import com.protect.jikigo.ui.extensions.statusBarColor
@@ -29,8 +34,9 @@ class PointHistoryFragment : Fragment() {
     private var _binding: FragmentPointHistoryBinding? = null
     private val binding get() = _binding!!
     private val adapter: PointHistoryAdapter by lazy { PointHistoryAdapter() }
+    private val calendarAdapter: CalendarDaysAdapter by lazy { CalendarDaysAdapter() }
     private val viewModel: PointHistoryViewModel by viewModels()
-    private lateinit var userId : String
+    private lateinit var userId: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -57,10 +63,26 @@ class PointHistoryFragment : Fragment() {
 
     private fun setLayout() {
         onClickToolbar()
+        setupWeekendUI()
         recycler()
         calender()
         observe()
         checkData()
+    }
+
+    private fun setupWeekendUI() {
+        val weekend = resources.getStringArray(R.array.weekend_array)
+        weekend.forEach { day ->
+            TextView(requireContext()).apply {
+                text = day
+                layoutParams =
+                    LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)
+                gravity = Gravity.CENTER
+                setPadding(0, 8, 0, 8)
+                setTypeface(null, Typeface.BOLD)
+                binding.linearWeekendLabel.addView(this)
+            }
+        }
     }
 
     // 시작 시 확인할 데이터
@@ -80,12 +102,20 @@ class PointHistoryFragment : Fragment() {
 
     private fun recycler() {
         binding.recyclerPointHistory.adapter = adapter
+        binding.recycler.adapter = calendarAdapter
     }
 
     private fun observe() {
         binding.apply {
             viewModel.pointData.observe(viewLifecycleOwner) {
                 adapter.submitList(it)
+            }
+
+            viewModel.nowMonth.observe(viewLifecycleOwner) {
+                textView2.text = viewModel.toCalendarDateFormat()
+            }
+            viewModel.monthOfDays.observe(viewLifecycleOwner) {
+                calendarAdapter.submitList(it)
             }
         }
     }
@@ -95,14 +125,13 @@ class PointHistoryFragment : Fragment() {
      */
     private fun calender() {
         binding.apply {
-            setTodayDate()
-
-            calendarPointHistory.setOnDateChangeListener { view, year, month, dayOfMonth ->
-                val dateText = getFormattedDate(year, month, dayOfMonth)
-                val selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth)
-                viewModel.loadPointData(userId, selectedDate)
-                tvPointHistoryDate.text = dateText
+            button.setOnClickListener {
+                viewModel.changeMonth(false)
             }
+            button1.setOnClickListener {
+                viewModel.changeMonth(true)
+            }
+            setTodayDate()
         }
     }
 
@@ -132,3 +161,15 @@ class PointHistoryFragment : Fragment() {
     }
 
 }
+
+/*
+* 0. user의 저장된 Calendar 컬렉션을 모두 가져온 후 리스트에 보여줄 수 있도록 한다.
+* 1. 리스트 클릭 시 2025-02-27 형태로 변경
+* 2. 2025-02-27 문서, userId를 가지고 내역 데이터 찾기
+* 3. 찾은 데이터를 PointHistoryAdapter에 전달
+*
+* 일단 모델 정의
+* 캘린터 리스트 모델 변경
+* 값 불러와서 날짜 매치하여 값 넣기
+*
+* */
