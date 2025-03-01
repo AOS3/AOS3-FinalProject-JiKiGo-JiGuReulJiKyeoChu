@@ -29,7 +29,7 @@ class  PointHistoryRepo @Inject constructor(
     }
 
 
-    fun loadCalendar(userId: String, year: Int, month: Int, item: (MutableList<String>) -> Unit) {
+    fun loadCalendar(userId: String, year: Int, month: Int, item: (MutableList<String>, MutableList<UserPaymentHistory>) -> Unit) {
         firestore.collection("UserInfo").document(userId).collection("Calendar").get()
             .addOnSuccessListener {
                 val dateList = mutableListOf<String>()
@@ -50,6 +50,7 @@ class  PointHistoryRepo @Inject constructor(
                             pointList.add(paymentData)
                             }
                             Log.d("test", pointList.toString())
+                            item(dateList, pointList)
                         }
                         .addOnFailureListener {  }
 

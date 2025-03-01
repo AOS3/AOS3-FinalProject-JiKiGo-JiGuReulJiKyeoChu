@@ -33,12 +33,16 @@ class PointHistoryViewModel @Inject constructor(
     private val _checkedDataList = MutableLiveData<List<String>>()
     val checkedDataList: LiveData<List<String>> get() = _checkedDataList
 
+    private val _payDataList = MutableLiveData<List<UserPaymentHistory>>()
+    val payDataList: LiveData<List<UserPaymentHistory>> get() = _payDataList
+
     init {
         getNowYearAndMonth()
         getDateOfTheCurrentMonth()
 
-        pointHistoryRepo.loadCalendar("wltjr6432@naver.com", nowYear.value!!, nowMonth.value!!) {
-            _checkedDataList.value = it
+        pointHistoryRepo.loadCalendar("wltjr6432@naver.com", nowYear.value!!, nowMonth.value!!) { checkList, payData ->
+            _checkedDataList.value = checkList
+            _payDataList.value = payData
             getCalenderData()
         }
     }

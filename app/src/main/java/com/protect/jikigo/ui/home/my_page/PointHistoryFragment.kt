@@ -117,6 +117,9 @@ class PointHistoryFragment : Fragment() {
             viewModel.monthOfDays.observe(viewLifecycleOwner) {
                 calendarAdapter.submitList(it)
             }
+            viewModel.pointData.observe(viewLifecycleOwner) {
+                calendarAdapter.submitPointList(it)
+            }
         }
     }
 
